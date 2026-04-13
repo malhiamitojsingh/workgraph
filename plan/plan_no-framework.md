@@ -1,220 +1,233 @@
-# Plan: India Tech Hubs Job Board (Zero‑Framework, Black‑and‑White, Semantic HTML)
+# India Tech Hubs Job Board: Enhanced Aggregator Plan
 
-## Phase 1: Strategic & Geographic Foundation
+## Phase 1: Strategic Foundation & Source Prioritization
 
-- **City Scope – Six Indian Tech Hubs Only**
-  - Bengaluru (highest AI/startup/GCC density)
-  - Hyderabad (enterprise tech, pharma‑tech)
-  - Delhi NCR (AI, consulting, public sector)
-  - Pune (manufacturing and engineering R&D)
-  - Mumbai (BFSI and corporate headquarters)
-  - Chennai (established IT and GCC talent)
-  - **Constraint:** Crawler and UI will strictly filter to these six cities. No other locations appear anywhere.
+- **Geographic Focus – Six Indian Tech Hubs Only**
+  - Bengaluru
+  - Hyderabad
+  - Delhi NCR
+  - Pune
+  - Mumbai
+  - Chennai
+  - All crawlers and UI filters will strictly enforce this list. Jobs from other cities are discarded.
 
-- **Data Acquisition Model – Crawler‑First Aggregation**
-  - No user‑submitted job postings.
-  - Node.js worker script runs every 3–6 hours on a free cron service (GitHub Actions, Vercel Cron Jobs, or a small VPS).
-  - Primary Sources
-    - Applicant Tracking System sitemaps: Greenhouse, Lever, Ashby.
-    - Public RSS feeds of major Indian job portals.
-    - Monthly Hacker News "Who is Hiring?" threads.
-    - Relevant GitHub remote‑job repositories.
+- **Data Source Strategy – Prioritized for India Relevance**
+  - Primary Tier (High-Volume India Platforms)
+    - Naukri (India's largest job portal)
+    - Shine (HT Media)
+    - TimesJobs (Times Group)
+    - Foundit (Monster India)
+    - Instahyre (AI-powered, tech focus)
+    - Hirist (exclusive tech jobs in India)
+    - CutShort (startup and tech roles)
+  - Secondary Tier (Global Platforms with Strong India Presence)
+    - Indeed
+    - Glassdoor
+    - Monster
+    - SimplyHired
+    - LinkedIn (via public feeds or partner API)
+    - StackOverflow Jobs
+    - GitHub Jobs/Careers
+  - Tertiary Tier (Remote and Niche Tech)
+    - RemoteOK
+    - WeWorkRemotely
+    - AngelList/Wellfound
+    - Dice
+    - Turing
+    - Arc
+    - FlexJobs
+  - **Source Count:** 24 total platforms identified; initial launch will focus on Primary Tier and top Secondary sources.
 
-- **Technology Stack Constraints**
-  - Frontend: Pure HTML, vanilla JavaScript, and a single `<style>` tag in the `<head>`. No separate CSS files. No frameworks (React, Vue, Angular, etc.).
-  - Backend: Node.js or Bun for the crawler and a simple REST API.
-  - Database: PostgreSQL for structured storage.
-  - Search Engine: Meilisearch (self‑hosted, open‑source, Rust‑based, instant‑as‑you‑type).
-  - Deployment: Vercel for static assets and serverless API endpoints, or a Hetzner VPS with Coolify.
+- **Technology Stack Constraints (Unchanged)**
+  - Frontend: Pure HTML, vanilla JavaScript, single `<style>` tag. No frameworks.
+  - Backend: Node.js or Bun for crawler and API.
+  - Database: PostgreSQL.
+  - Search Engine: Meilisearch (self-hosted).
+  - Deployment: Vercel + VPS.
 
 ---
 
-## Phase 2: Semantic HTML Shell & Accessibility Baseline
+## Phase 2: Semantic HTML Shell & Accessibility (Unchanged)
 
 - **Objective**
-  - Build a page that is fully functional and navigable before any CSS loads.
-  - Ensure perfect keyboard and screen‑reader support using native HTML elements and ARIA.
+  - Fully functional page before CSS loads.
+  - Perfect keyboard and screen-reader navigation.
 
-- **Font Strategy – Zero Network Overhead**
-  - Use the system UI font stack.
-  - No external font files (no Google Fonts, no Adobe Fonts).
-  - Font list: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`.
+- **Font Strategy – System UI Font Stack Only**
+  - No external font downloads.
 
-- **Landmark Structure (Native HTML Tags)**
-  - `<header>` contains the main navigation and search form.
-  - `<nav>` wraps the city list, using `<ul>` and `<li>`.
-  - `<form role="search">` with a visible `<label>` and `<input type="search">`.
-  - `<main>` holds the primary content and has `tabindex="-1"` for focus management.
-  - `<footer>` contains copyright and legal text.
+- **Landmark and ARIA Structure**
+  - Semantic elements: `<header>`, `<nav>`, `<main>`, `<footer>`, `<article>`, `<time>`.
+  - Explicit ARIA labels for navigation and search.
+  - Skip-to-content link.
+  - Live region for search result announcements.
 
-- **Accessibility Enhancements**
-  - Skip‑to‑content link at the top of the page.
-  - ARIA labels on navigation (`aria-label="Main navigation"`) and search (`aria-label="Job search"`).
-  - `aria-current="page"` on the active navigation link.
-  - Live region (`aria-live="polite"`) for announcing search result counts.
+- **Command Palette Modal – Native `<dialog>` Element**
+  - Handles focus trapping and backdrop automatically.
 
-- **Command Palette Modal – Native `<dialog>`**
-  - Use the HTML `<dialog>` element for the advanced filter overlay.
-  - Benefits: automatic focus trapping, backdrop handling, and ESC key dismissal.
-  - Trigger button includes `aria-keyshortcuts="Meta+K"`.
-
-- **Job Card Structure – Semantic Articles**
-  - Each job listing is an `<article>` inside a list container (ordered or unordered list).
-  - Job title wrapped in an `<h2>` with a hyperlink.
-  - Location and salary inside a `<p>` with inline `<span>` elements.
-  - Posting date uses the `<time>` element with a valid `datetime` attribute.
+- **Job Card Structure**
+  - Each job is an `<article>` inside an ordered or unordered list.
 
 ---
 
-## Phase 3: Design Engineered Black‑and‑White UI
+## Phase 3: Design Engineered Black‑and‑White UI (Unchanged)
 
 - **Constraint**
-  - All CSS resides in a single `<style>` block in the `<head>`.
-  - No external stylesheets, no preprocessors, no CSS‑in‑JS.
+  - Single `<style>` block in `<head>`.
 
-- **Monochrome Color Palette**
-  - Background: white (`#ffffff`).
-  - Primary text: near‑black (`#111111`).
-  - Borders and dividers: light gray (`#e5e5e5`).
-  - Secondary text (timestamps, metadata): medium gray (`#666666`).
-  - Hover and focus states use black (`#000000`) combined with opacity transitions.
+- **Monochrome Palette**
+  - Background: `#ffffff`
+  - Text: `#111111`
+  - Borders: `#e5e5e5`
+  - Secondary text: `#666666`
 
 - **Layout – CSS Grid**
-  - Job cards use `display: grid` with two columns (content and optional metadata).
-  - Page layout uses a centered single‑column grid with max‑width and generous padding.
-  - No float‑based or absolute‑positioning hacks.
+  - Clean, responsive, no floats.
 
-- **Minimal Animations (Performance‑First)**
-  - Only `opacity` and `transform` properties are animated.
-  - Link and button hover states use `transition: opacity 0.15s ease`.
-  - Dialog opening animation uses a subtle `fade-in` keyframe.
-  - No animation on page load, width, height, or layout‑inducing properties.
+- **Minimal Animations**
+  - Only `opacity` and `transform` transitions.
+  - Hover effects: subtle opacity change.
 
 - **Focus Indicators**
-  - Preserve browser default `:focus-visible` outline.
-  - Enhance with `outline: 2px solid #000` and `outline-offset: 2px`.
+  - Enhanced `:focus-visible` outline.
 
 - **Responsive Behavior**
-  - Grid and flex containers wrap naturally.
-  - Font sizes use relative units (`rem`) with a base of 16px.
-  - Touch targets are at least 44×44 pixels.
+  - Relative units, touch targets minimum 44×44 pixels.
 
 ---
 
-## Phase 4: Crawler & Data Pipeline (The Engine)
+## Phase 4: Enhanced Crawler & Data Pipeline (Revised with Source Strategy)
 
 - **Crawler Architecture – Node.js Worker**
-  - Single script runs on a schedule.
-  - Uses `axios` for HTTP requests, `xml2js` for parsing sitemaps, and `cheerio` for HTML extraction.
-  - City Filter: Checks job location text against the six city names and known suburbs. Only matching jobs are processed.
+  - Single script triggered by cron schedule.
+  - Uses `axios`, `xml2js`, `cheerio`.
+  - City Filter: Checks location text against six canonical city names and known suburbs.
 
-- **Data Normalization and Deduplication**
-  - Location Normalization: Map variations to canonical city names (e.g., "BLR" → "Bengaluru").
-  - Tech Stack Normalization: Simple mapping object to unify synonyms (e.g., "React.js" → "React").
-  - Duplicate Detection: Compare title, company, and location within a three‑day window before inserting into the database.
+- **Source-Specific Handling – Tiered Approach**
+  - **Primary Tier (India Portals)**
+    - Scraping required for most (Naukri, Shine, TimesJobs, Foundit).
+    - Implement lightweight, targeted scrapers with selectors that are regularly maintained.
+    - Use Apify or custom scripts with caching to reduce redundant requests.
+  - **Secondary Tier (Global Platforms)**
+    - Use official APIs where available:
+      - Indeed Job Sync API (requires partner agreement, fallback to scraping if needed)
+      - LinkedIn Partner Program API (if accessible)
+      - RemoteOK public API
+      - WeWorkRemotely READ API
+    - For platforms without APIs (Glassdoor, SimplyHired), use scraping with careful rate limiting.
+  - **Tertiary Tier (Niche Tech)**
+    - Most offer public RSS/Atom feeds or simple HTML.
+    - Crawl once daily due to lower volume.
+
+- **Smart Scheduling Strategy**
+  - **High-Volume Sources:** Naukri, Indeed, Shine → every 2-4 hours.
+  - **Medium-Volume Sources:** TimesJobs, Foundit, Instahyre, Hirist → every 6-8 hours.
+  - **Low-Volume Sources:** CutShort, RemoteOK, WeWorkRemotely, StackOverflow → once daily.
+  - **Real-Time Updates:** Implement webhook listeners where platforms support them to avoid polling.
+
+- **Data Normalization and Deduplication (Enhanced)**
+  - **Location Normalization:** Map variants like "Bengaluru", "Bangalore", "BLR" to "Bengaluru".
+  - **Company Name Normalization:** Remove suffixes like "Pvt Ltd", "Inc." for matching.
+  - **Job Title Normalization:** Map synonyms (e.g., "Frontend Developer" ↔ "Front End Engineer").
+  - **Deduplication Engine:**
+    - Generate a hash based on: normalized title + normalized company + city + first 150 chars of description.
+    - Use fuzzy matching for slight variations (Levenshtein distance on title and company).
+    - Store canonical job entry in PostgreSQL; subsequent duplicates from other sources are ignored or logged.
 
 - **Database Schema (PostgreSQL)**
-  - Table `jobs` with columns: `id`, `title`, `company`, `location` (enum or text constrained to six cities), `description_text`, `posted_date`, `source_url`, `tech_stack` (array), `created_at`.
-  - Indexes on `location`, `posted_date`, and `tech_stack` for fast queries.
+  - Table `jobs`:
+    - `id` (UUID)
+    - `title` (text)
+    - `normalized_title` (text)
+    - `company` (text)
+    - `normalized_company` (text)
+    - `location` (text, constrained to six city values)
+    - `description_text` (text)
+    - `posted_date` (timestamp with time zone)
+    - `source_url` (text, unique)
+    - `tech_stack` (text array)
+    - `created_at` (timestamp)
+    - `source_platform` (text)
+  - Indexes on `location`, `posted_date`, `tech_stack`, `normalized_title`, `normalized_company`.
 
 - **Execution Environment**
-  - GitHub Actions workflow with a cron trigger (`0 */6 * * *`).
-  - Or a lightweight VPS with a systemd timer.
+  - GitHub Actions with cron triggers for each tier.
+  - Fallback VPS cron jobs for reliability.
 
 ---
 
-## Phase 5: Meilisearch Integration & Instant Search
+## Phase 5: Meilisearch Integration & Instant Search (Unchanged)
 
 - **Meilisearch Setup**
-  - Self‑hosted on the same VPS as the API.
-  - Run as a systemd service with a master key for security.
-  - Create an index named `jobs` with searchable attributes: `title`, `company`, `location`, `tech_stack`, `description_text`.
+  - Self-hosted on VPS with master key.
+  - Index `jobs` with searchable attributes: `title`, `normalized_title`, `company`, `normalized_company`, `location`, `tech_stack`, `description_text`.
 
-- **Indexing from the Crawler**
-  - After saving a job to PostgreSQL, push the same document to Meilisearch using the official JavaScript client.
-  - Include a unique `id` field matching the database primary key.
+- **Indexing from Crawler**
+  - After PostgreSQL insert, push document to Meilisearch using JavaScript client.
 
-- **Frontend Search Implementation**
-  - Use the official `instantsearch.js` library (vanilla JavaScript version).
-  - Connect to Meilisearch using the `instant-meilisearch` adapter.
-  - Widgets configured:
-    - `searchBox` bound to the main search input.
-    - `hits` to render job cards with a custom template.
-    - `refinementList` for city filtering (attribute: `location`).
-    - `pagination` for navigating results.
-
-- **Accessibility Integration with InstantSearch**
-  - Listen for the `render` event.
-  - Update a dedicated ARIA live region element with the number of results found.
-  - Manage focus when filters are applied or cleared.
+- **Frontend Search**
+  - `instantsearch.js` with `instant-meilisearch` adapter.
+  - Widgets: `searchBox`, `hits`, `refinementList` (city), `pagination`.
+  - Accessibility: ARIA live region announces result count on render.
 
 ---
 
-## Phase 6: SEO Domination
+## Phase 6: SEO Domination (Unchanged)
 
-- **Structured Data – JSON‑LD JobPosting**
-  - Every job detail page includes a `<script type="application/ld+json">` block.
-  - Contains all required Google properties: `title`, `description`, `datePosted`, `validThrough`, `hiringOrganization`, `jobLocation` with `addressLocality` set to the Indian city.
+- **Structured Data – JSON-LD JobPosting**
+  - Every job detail page includes complete schema.
 
 - **Programmatic SEO (pSEO) Pages**
-  - Generate static HTML pages for every combination of city and major tech skill.
-  - Example URLs: `/bengaluru-react-jobs`, `/hyderabad-python-jobs`, `/pune-ai-ml-jobs`.
-  - Each page features:
-    - Unique `<h1>` and `<meta name="description">`.
-    - A short, AI‑generated market analysis (200‑300 words) specific to that city and skill.
-    - A list of the 20 most recent matching jobs.
+  - Static pages for city–skill combinations.
+  - Unique content and 20 most recent matching jobs.
 
-- **Technical SEO Foundations**
-  - Dynamic Sitemap: `/sitemap.xml` split into multiple files when exceeding 50,000 URLs.
-  - Canonical Tags: Self‑referencing `<link rel="canonical">` on every page.
-  - Mobile‑First Design: The minimalist grid and system fonts guarantee excellent rendering on all devices.
-  - Page Speed: Target Google Lighthouse score of 100/100 (achievable due to zero framework overhead).
-  - Google Indexing API: Notify Google instantly when new jobs are added or old ones expire.
+- **Technical SEO**
+  - Dynamic sitemap, canonical tags, mobile-first, target Lighthouse 100.
+  - Google Indexing API for instant updates.
 
-- **Semantic HTML as an SEO Signal**
-  - Proper use of `<article>`, `<h2>`, `<time>`, and `<address>` (or location spans) provides strong contextual clues to search engines.
+- **Semantic HTML as SEO Signal**
+  - Proper use of `<article>`, `<h2>`, `<time>`, and location markup.
 
 ---
 
-## Phase 7: Monetization (Optional, UX‑Friendly)
+## Phase 7: Monetization (Optional, Unchanged)
 
 - **Sponsored Listings Model**
-  - Free tier: Jobs appear in the feed in chronological order.
-  - Paid tier: A company can pay a flat monthly fee to have one or more jobs pinned to the top of relevant city or skill pages.
-  - Visual Distinction: Sponsored jobs receive a subtle visual treatment (e.g., a thin black left border) and a small "Sponsored" label.
-
-- **No Traditional Display Ads**
-  - Avoid banner ads, pop‑ups, or intrusive overlays to maintain the clean, high‑trust design.
+  - Free tier: chronological feed.
+  - Paid tier: pinned jobs with subtle black left border and "Sponsored" label.
+  - No banner ads.
 
 ---
 
-## Phase 8: Launch & Monitoring
+## Phase 8: Launch & Monitoring (Enhanced with Source Health)
 
 - **Deployment**
-  - Frontend: Vercel connected to a GitHub repository for automatic deployments on push.
-  - Backend API and Meilisearch: Deployed on a single VPS (e.g., Hetzner) using Coolify for easy management or a simple Docker Compose setup.
+  - Frontend: Vercel (GitHub integration).
+  - Backend API and Meilisearch: VPS with Coolify or Docker Compose.
 
 - **Monitoring & Alerts**
-  - Use Cronitor or Healthchecks.io to ping the crawler endpoint after each scheduled run.
-  - Alert via SMS or email if the crawler fails or the total job count drops by more than 10%.
+  - Cronitor or Healthchecks.io pings crawler after each run.
+  - Alert if job count drops more than 10% overall or per primary source.
+  - Source-specific health checks: Monitor selector changes for scraped platforms; trigger manual review if failure persists.
 
 - **Analytics**
-  - Integrate Plausible Analytics (privacy‑focused, cookie‑less).
-  - No need for a cookie consent banner, further improving page speed and user trust.
+  - Plausible for privacy-first, cookie-less insights.
 
-- **Maintenance Checklist**
-  - Weekly review of crawler logs for new ATS domains or broken selectors.
-  - Monthly Meilisearch version updates.
-  - Quarterly content review of pSEO pages for freshness.
+- **Maintenance Checklist (Updated)**
+  - Weekly: Review crawler logs for new domains or broken selectors.
+  - Monthly: Update Meilisearch and dependencies.
+  - Quarterly: Audit pSEO page content freshness.
+  - Bi-annual: Re-evaluate source list for new or deprecated job boards.
 
 ---
 
-## Phase 9: Final Deliverable Summary
+## Phase 9: Final Deliverable Summary (Updated)
 
-- The site is a single, fast HTML document with embedded styles.
-- It lists only jobs from the six designated Indian tech hubs.
-- It uses semantic HTML and ARIA to be fully accessible.
-- It features a black‑and‑white, system‑font, grid‑based design with minimal, purposeful animations.
-- It is powered by a scheduled Node.js crawler that populates PostgreSQL and Meilisearch.
-- It offers instant, typo‑tolerant search via Meilisearch.
-- It is optimized to rank #1 in Google for niche Indian tech job queries through rigorous technical SEO and structured data.
+- **Scope:** Six Indian tech hubs only.
+- **Sources:** 24 prioritized platforms, with a focus on India-specific boards.
+- **Frontend:** Single HTML file, embedded styles, system fonts, semantic and accessible.
+- **Design:** Black‑and‑white, grid‑based, minimal animations.
+- **Backend:** Node.js crawler with tiered scheduling, deduplication, and API fallbacks.
+- **Search:** Meilisearch with instant, typo‑tolerant results.
+- **SEO:** Optimized for #1 ranking via structured data, pSEO, and speed.
+- **Compliance:** Respects `robots.txt`, rate limits, and platform terms; adds value through aggregation and enhanced search.
